@@ -1,0 +1,245 @@
+openapi: 3.0.0
+info:
+  title: 'Test'
+  version: v0.6.0-alpha
+servers:
+  - url: /
+    description: ''
+paths:
+  /api/authentication_token:
+    ref: 'JWT Token'
+    post:
+      operationId: postCredentialsItem
+      tags:
+        - Token
+      responses:
+        200:
+          description: 'Get JWT token'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+      summary: 'Get JWT token to login.'
+      description: ''
+      parameters: []
+      requestBody:
+        description: 'Generate new JWT Token'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+        required: false
+      deprecated: false
+      security: []
+    parameters: []
+  /api/test:
+    get:
+      operationId: api_test_get_collection
+      tags:
+        - Test
+      responses:
+        200:
+          description: 'Test collection'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Test'
+            application/hal+json:
+              schema:
+                type: object
+                properties:
+                  _embedded: {type: array, items: {$ref: '#/components/schemas/Test.jsonhal'}}
+                  totalItems: {type: integer, minimum: 0}
+                  itemsPerPage: {type: integer, minimum: 0}
+                  _links: {type: object, properties: {self: {type: object, properties: {
+                          href: {type: string, format: iri-reference}}}, first: {
+                        type: object, properties: {href: {type: string, format: iri-reference}}},
+                      last: {type: object, properties: {href: {type: string, format: iri-reference}}},
+                      next: {type: object, properties: {href: {type: string, format: iri-reference}}},
+                      previous: {type: object, properties: {href: {type: string, format: iri-reference}}}}}
+                required:
+                  - _links
+                  - _embedded
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Test'
+      summary: 'Retrieves the collection of Test resources.'
+      description: 'Retrieves the collection of Test resources.'
+      parameters:
+        - name: page
+          in: query
+          description: 'The collection page number'
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 1
+          style: form
+          explode: false
+          allowReserved: false
+        - name: itemsPerPage
+          in: query
+          description: 'The number of items per page'
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 30
+            minimum: 0
+          style: form
+          explode: false
+          allowReserved: false
+      deprecated: false
+    post:
+      operationId: api_test_post
+      tags:
+        - Test
+      responses:
+        201:
+          description: 'Test resource created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Test.jsonhal'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Test'
+          links: {}
+        400:
+          description: 'Invalid input'
+        422:
+          description: 'Unprocessable entity'
+      summary: 'Creates a Test resource.'
+      description: 'Creates a Test resource.'
+      parameters: []
+      requestBody:
+        description: 'The new Test resource'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Test'
+          application/hal+json:
+            schema:
+              $ref: '#/components/schemas/Test.jsonhal'
+          text/html:
+            schema:
+              $ref: '#/components/schemas/Test'
+        required: true
+      deprecated: false
+    parameters: []
+components:
+  schemas:
+    Test:
+      type: object
+      description: 'Class Test'
+      deprecated: false
+      properties:
+        id:
+          readOnly: true
+          type: integer
+        uuid:
+          readOnly: true
+          type: string
+          nullable: true
+        minValue:
+          type: integer
+          nullable: true
+        maxValue:
+          type: integer
+          nullable: true
+        resourceType:
+          type: string
+          format: iri-reference
+          nullable: true
+        createdBy:
+          type: string
+          nullable: true
+        updatedBy:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Test.jsonhal:
+      type: object
+      description: 'Class Test'
+      deprecated: false
+      properties:
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: iri-reference
+        id:
+          readOnly: true
+          type: integer
+        uuid:
+          readOnly: true
+          type: string
+          nullable: true
+        minValue:
+          type: integer
+          nullable: true
+        maxValue:
+          type: integer
+          nullable: true
+        createdBy:
+          type: string
+          nullable: true
+        updatedBy:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          readOnly: true
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            fullname:
+              type: string
+            roles:
+              type: array
+              items:
+                type: string
+            teams:
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid: {type: string}
+    Credentials:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'johndoe@example.com OR johndoe'
+        password:
+          type: string
+          example: password

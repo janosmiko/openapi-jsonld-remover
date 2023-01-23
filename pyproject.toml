@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "openapi-jsonld-remover"
+version = "0.1.0"
+description = ""
+authors = ["Janos Miko <info@janosmiko.com>"]
+readme = "README.md"
+packages = [{include = "openapi_jsonld_remover"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+ruamel-yaml = "^0.17.21"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
